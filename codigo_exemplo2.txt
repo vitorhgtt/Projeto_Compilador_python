@@ -1,0 +1,14 @@
+program ident;
+const x = 10;
+var n, resultado, i : integer;
+begin
+    resultado := 1;
+    read(n);
+    
+    for i := 1 to n do
+    begin
+        resultado := resultado * i;
+    end;
+    print{'literal'};
+    print{'Fatorial de', n, 'é', resultado};
+end.

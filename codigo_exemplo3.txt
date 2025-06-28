@@ -1,0 +1,22 @@
+program ident;
+!! Demonstra a troca de valores entre duas variaveis
+
+var a, b : integer;
+
+procedure troca(var x, y : integer);
+begin
+    x := x + y;
+    y := x - y;
+    x := x - y;
+end;
+
+begin
+    a := 10;
+    b := 20;
+    
+    print{"Antes da troca: a =", a, "| b =", b};
+    troca(a, b);
+    
+    print{"Depois da troca: a =", a, "| b =", b};
+    print{'literal'};
+end.
