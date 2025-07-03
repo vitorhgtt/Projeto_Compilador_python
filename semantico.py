@@ -86,8 +86,13 @@ class AnalisadorSemantico:
         ident = self.consumir(Token.IDENT)
         if self.token_atual().token == Token.ATTRIB:
             self.consumir(Token.ATTRIB)
-            valor = self.token_atual()
-            tipo_valor = self.inferir_tipo_token(valor.token)
+            # valor = self.token_atual()  COMENTADO VINICIUS
+            # tipo_valor = self.inferir_tipo_token(valor.token) COMENTADO VINI
+
+            #INCLUSAO INICIO#
+            tipo_valor = self.inferir_tipo_expressao()
+
+            # FIM
             simbolo = self.ts.buscar(ident.lexema)
             if not simbolo:
                 raise Exception(f"[Erro Semântico] Variável '{ident.lexema}' não declarada.")
@@ -111,3 +116,41 @@ class AnalisadorSemantico:
             simbolo = self.ts.buscar(self.token_atual().lexema)
             return simbolo.tipo if simbolo else "desconhecido"
         return "desconhecido"
+
+    # INCLUÍDO VINICIUS - TESTE
+    def inferir_tipo_expressao(self):
+        tipos = set()
+        operadores = {Token.MAIS, Token.MENOS, Token.ASTK, Token.FSLASH}
+        while self.token_atual() and self.token_atual().token != Token.PVIRG:
+            token = self.token_atual()
+            if token.token == Token.NINT:
+                tipos.add("integer")
+            elif token.token == Token.NREAL:
+                tipos.add("real")
+            elif token.token in (Token.LITERAL, Token.VSTRING, Token.STRING):
+                tipos.add("string")
+            elif token.token == Token.IDENT:
+                simbolo = self.ts.buscar(token.lexema)
+                if simbolo:
+                    tipos.add(simbolo.tipo)
+                else:
+                    raise Exception(f"[Erro Semântico] Identificador '{token.lexema}' na linha {token.linha} não declarado.")
+            elif token.token in operadores:
+                pass  # operador aceito
+            else:
+                raise Exception(f"[Erro Semântico] Token inválido '{token.lexema}' na linha {token.linha} em expressão.")
+
+            self.avancar()
+
+        if "string" in tipos and ("integer" in tipos or "real" in tipos):
+            raise Exception(f"[Erro Semântico] Operação entre tipos incompatíveis na expressão: string com número (linha {token.linha}).")
+
+        if "real" in tipos and "integer" in tipos:
+            return "real"
+        elif len(tipos) == 1:
+            return tipos.pop()
+        elif "desconhecido" in tipos:
+            return "desconhecido"
+        else:
+            raise Exception(f"[Erro Semântico] Tipos incompatíveis na expressão (linha {token.linha}).")
+

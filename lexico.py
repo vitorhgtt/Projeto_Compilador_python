@@ -296,7 +296,7 @@ class Lexico:
 
 palavras = []
 
-with open('codigo_exemplo.txt', 'r') as file:
+with open('codigo_exemplo6.txt', 'r') as file:
     lexico = Lexico(file.read())
     palavraAtual = lexico.proxima_palavra()
     while palavraAtual.token != Token.EOF:
