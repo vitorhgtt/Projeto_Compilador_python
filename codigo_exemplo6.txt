@@ -1,0 +1,9 @@
+program ident;
+const x = 10;
+var y : integer;  z : string;
+begin
+    
+    z := '10' + 10;
+    
+    print { y };
+end.

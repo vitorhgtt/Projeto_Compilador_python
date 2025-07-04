@@ -1,0 +1,8 @@
+program ident;
+const x = 10;
+var y : integer;
+begin
+    x := 20;
+    y := 1;
+    print { y };
+end.

@@ -1,0 +1,5 @@
+program ident;
+var a : integer;
+begin
+
+end.
